@@ -1,16 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Enter Name</title>
+    <title>Join Chat</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body style="display:flex; justify-content:center; align-items:center; height:100vh; font-family:sans-serif;">
+
+<body class="bg-dark d-flex justify-content-center align-items-center vh-100">
+
+<div class="card p-4 shadow-lg text-center" style="width: 350px; border-radius: 15px;">
+
+    <h3 class="mb-3">💬 Join Chat</h3>
 
     <form action="/chat" method="get">
-        <h2>Enter your name</h2>
-        <input type="text" name="username" placeholder="Your name" required>
-        <br><br>
-        <button type="submit">Enter Chat</button>
+        
+        <input 
+            type="text" 
+            name="username" 
+            class="form-control mb-3" 
+            placeholder="Enter your name" 
+            required>
+
+        <button type="submit" class="btn btn-primary w-100">
+            Enter Chat
+        </button>
+
     </form>
+
+</div>
 
 </body>
 </html>

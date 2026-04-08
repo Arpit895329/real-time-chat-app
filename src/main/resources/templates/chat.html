@@ -14,12 +14,10 @@
     <div id="chat" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
 
     </div>
-    <div class="input-group mb-3">
-      <input type="text" id="senderInput" class="form-control" placeholder="Enter your name">
-    </div>
+    
 
     <div class="input-group mb-3">
-      <input type="text" id="messageInput" class="form-control" placeholder="${username}">
+      <input type="text" id="messageInput" class="form-control" placeholder="chat here">
     <div id="input-group-append">
       <button id="sendMessage" class="btn btn-primary">Send</button>
     </div>
@@ -41,15 +39,15 @@
     stompClient = Stomp.over(socket);
 
     stompClient.connect({},function(frame){
-      console.log("Connected ✅");
+      
       setConnected(true)
       stompClient.subscribe('/topic/messages', function(message){
-        console.log("📩 Message received from server");
+        
         showMessage(JSON.parse(message.body));
       });
     });}
     function showMessage(message){
-      console.log("showMessage called.......");
+      
       var chat= document.getElementById('chat');
       var messageElement = document.createElement('div');
       messageElement.textContent = message.sender +': '+message.content;
@@ -60,7 +58,7 @@
     }
   
   function sendMessage(){
-    var sender=document.getElementById("senderInput").value;
+    var sender="[[${username}]]";
     var content=document.getElementById("messageInput").value;
     var chatMessage={
       sender:sender,
