@@ -10,6 +10,7 @@
 <body>
   <div class="container mt-4">
     <h1 class="text-center">Real Time Chat Application</h1>
+    <h2>Welcome, <span th:text="${username}"></span> 👋</h2>
     <div id="chat" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: auto;">
 
     </div>
@@ -18,7 +19,7 @@
     </div>
 
     <div class="input-group mb-3">
-      <input type="text" id="messageInput" class="form-control" placeholder="Type your Message">
+      <input type="text" id="messageInput" class="form-control" placeholder="${username}">
     <div id="input-group-append">
       <button id="sendMessage" class="btn btn-primary">Send</button>
     </div>
@@ -26,6 +27,9 @@
   </div>  
 </body>
 <script>
+  
+    let username = "[[${username}]]";
+
   var stompClient = null;
   function setConnected(connected){
       document.getElementById('sendMessage').disabled = !connected;

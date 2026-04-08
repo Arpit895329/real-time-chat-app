@@ -19,6 +19,9 @@ public ChatMessage sendMessage(ChatMessage message){
 public String chat(){
     return "chat";
 }
-
+@GetMapping("/")
+public String home() {
+    return "index";
+}
 
 }
