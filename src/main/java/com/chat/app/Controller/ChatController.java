@@ -27,4 +27,9 @@ public String home() {
     return "landing";   
 }
 
+@GetMapping("/ping")
+public void ping(jakarta.servlet.http.HttpServletResponse response) throws Exception {
+    response.getWriter().write("OK");
+}
+
 }
