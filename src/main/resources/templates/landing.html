@@ -42,7 +42,7 @@
             class="card p-4 shadow-lg text-center"
             style="width: 350px; border-radius: 15px"
           >
-            <h3 class="mb-3">💬 Join Chat</h3>
+            <h3 class="mb-3">💬 Join Global Chat</h3>
             <form action="/chat" method="get">
               <input
                 type="text"
@@ -64,7 +64,22 @@
             style="width: 350px; border-radius: 15px"
           >
             <h3 class="mb-3">Chat Rooms</h3>
-            <p>Coming soon<span class="dots"></span></p>
+            <button
+              type="button"
+              class="btn btn-primary w-100"
+              th:onclick="|window.location.href='@{/join}'|"
+            >
+              Join Existing Room
+            </button>
+            <br>
+
+            <button
+              type="button"
+              class="btn btn-primary w-100"
+              th:onclick="|window.location.href='@{/create}'|"
+            >
+              Create Room
+            </button>
           </div>
         </div>
       </div>
