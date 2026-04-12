@@ -10,4 +10,4 @@ jobs:
 
     steps:
       - name: Ping Render App
-        run: curl https://real-time-chat-app-o18l.onrender.com/ping
+        run: curl https://real-time-chat-app-o18l.onrender.com
