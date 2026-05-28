@@ -25,4 +25,8 @@ public class RoomService {
         room.setCreatedBy(request.getUsername());
         return roomRepository.save(room);
     }
+
+    public boolean roomExists(String roomId) {
+        return roomRepository.existsByRoomId(roomId);
+    }
 }

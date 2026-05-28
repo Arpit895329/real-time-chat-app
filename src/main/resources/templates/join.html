@@ -3,9 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Join Room</title>
+    <link rel="icon" href="images/ab.png" type="image/png" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+        <link rel="stylesheet" th:href="@{/css/site.css}" />
 </head>
 <body class="bg-dark vh-100">
-    <h1>Join page..........</h1>
+    <div class="container-fluid h-100 d-flex justify-content-center align-items-center">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <div class="card p-4 shadow-lg text-center" style="width: 400px; border-radius: 15px">
+                    <h3 class="mb-3">🔓 Join Existing Room</h3>
+                    <form action="/join-room" method="post">
+                        <div class="mb-3">
+                            <input
+                                type="text"
+                                name="username"
+                                class="form-control"
+                                placeholder="Enter your name"
+                                required
+                            />
+                        </div>
+                        <div class="mb-3">
+                            <input
+                                type="text"
+                                name="roomId"
+                                class="form-control"
+                                placeholder="Enter room ID"
+                                required
+                            />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Join Room</button>
+                    </form>
+                    <br>
+                    <button
+                        type="button"
+                        class="btn btn-secondary w-100"
+                        onclick="window.location.href='/'"
+                    >
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
