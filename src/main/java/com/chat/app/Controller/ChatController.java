@@ -6,6 +6,7 @@ import com.chat.app.repository.ChatMessageRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import com.chat.app.service.RoomService;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -56,7 +57,8 @@ public String create(){
 }
 
 @GetMapping("/join")
-public String join(){
+public String join(Model model){
+    model.addAttribute("rooms", roomService.getAllRooms());
     return "join";
 }
 
@@ -66,10 +68,16 @@ public String join(){
 // }
 
 @PostMapping("/create-room")
-public String createRoomFromForm(@RequestParam String roomName,@RequestParam String username,Model model){ 
+public String createRoomFromForm(@RequestParam String roomName,
+                                 @RequestParam String username,
+                                 @RequestParam(required = false, defaultValue = "false") boolean locked,
+                                 @RequestParam(required = false) String password,
+                                 Model model){ 
     RoomRequest request = new RoomRequest();
     request.setRoomName(roomName);
     request.setUsername(username);
+    request.setLocked(locked);
+    request.setPassword(password);
 
     Room room = roomService.createRoom(request);
 
@@ -83,12 +91,21 @@ public String createRoomFromForm(@RequestParam String roomName,@RequestParam Str
 @PostMapping("/join-room")
 public String joinRoom(@RequestParam String username,
                        @RequestParam String roomId,
+                       @RequestParam(required = false) String password,
                        Model model){
-    // Validate that room exists
     if (!roomService.roomExists(roomId)) {
         model.addAttribute("error", "Room not found");
+        model.addAttribute("rooms", roomService.getAllRooms());
         return "join";
     }
+
+    Room room = roomService.getRoom(roomId);
+    if (room.isLocked() && !roomService.isPasswordValid(roomId, password)) {
+        model.addAttribute("error", "Invalid room password");
+        model.addAttribute("rooms", roomService.getAllRooms());
+        return "join";
+    }
+
     model.addAttribute("roomId", roomId);
     model.addAttribute("username", username);
     return "chat";
@@ -113,7 +130,9 @@ public void ping(jakarta.servlet.http.HttpServletResponse response) throws Excep
     @ResponseBody
     public List<ChatMessage> getMessages(@RequestParam(required = false) String roomId){
         String effectiveRoomId = roomId == null || roomId.isBlank() ? GLOBAL_ROOM_ID : roomId;
-        return chatRepo.findByRoomIdOrderByIdAsc(effectiveRoomId);
+        List<ChatMessage> messages = chatRepo.findTop200ByRoomIdOrderByIdDesc(effectiveRoomId);
+        Collections.reverse(messages);
+        return messages;
     }
 
 }

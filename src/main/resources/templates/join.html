@@ -1,54 +1,162 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join Room</title>
     <link rel="icon" href="images/ab.png" type="image/png" />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-        <link rel="stylesheet" th:href="@{/css/site.css}" />
-</head>
-<body class="bg-dark vh-100">
+    <link rel="stylesheet" th:href="@{/css/site.css}" />
+    <style>
+      .join-card,
+      .rooms-card {
+        min-width: 320px;
+        max-width: 32rem;
+        border-radius: 1rem;
+      }
+
+      .rooms-card {
+        max-height: 560px;
+        overflow: hidden;
+      }
+
+      .room-list {
+        max-height: 380px;
+        overflow-y: auto;
+      }
+
+      .room-row:hover {
+        background-color: #f8f9fa;
+      }
+
+      .card-title-hero {
+        font-size: 1.5rem;
+      }
+    </style>
+  </head>
+  <body class="bg-dark vh-100">
     <div class="container-fluid h-100 d-flex justify-content-center align-items-center">
-        <div class="row justify-content-center">
-            <div class="col-auto">
-                <div class="card p-4 shadow-lg text-center" style="width: 400px; border-radius: 15px">
-                    <h3 class="mb-3">🔓 Join Existing Room</h3>
-                    <form action="/join-room" method="post">
-                        <div class="mb-3">
-                            <input
-                                type="text"
-                                name="username"
-                                class="form-control"
-                                placeholder="Enter your name"
-                                required
-                            />
-                        </div>
-                        <div class="mb-3">
-                            <input
-                                type="text"
-                                name="roomId"
-                                class="form-control"
-                                placeholder="Enter room ID"
-                                required
-                            />
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Join Room</button>
-                    </form>
-                    <br>
-                    <button
-                        type="button"
-                        class="btn btn-secondary w-100"
-                        onclick="window.location.href='/'"
-                    >
-                        Back to Home
-                    </button>
-                </div>
-            </div>
+      <div class="row justify-content-center g-4 w-100 px-3">
+        <div class="col-12 col-lg-5 d-flex justify-content-center">
+          <div class="card p-4 shadow-lg join-card bg-white">
+            <h3 class="mb-3 text-center card-title-hero">🔓 Join Existing Room</h3>
+            <p class="text-muted text-center mb-4">
+              Enter your name and room ID, or select a room from the list.
+            </p>
+
+            <div th:if="${error != null}" class="alert alert-danger" th:text="${error}"></div>
+
+            <form action="/join-room" method="post">
+              <div class="mb-3">
+                <label class="form-label">Your Name</label>
+                <input
+                  type="text"
+                  name="username"
+                  class="form-control"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Room ID</label>
+                <input
+                  type="text"
+                  id="roomId"
+                  name="roomId"
+                  class="form-control"
+                  placeholder="Enter room ID or click a room"
+                  required
+                />
+              </div>
+
+              <div class="mb-3" id="roomPasswordField" style="display: none;">
+                <label class="form-label">Room Password</label>
+                <input
+                  type="password"
+                  id="roomPassword"
+                  name="password"
+                  class="form-control"
+                  placeholder="Enter room password"
+                />
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 mb-2">Join Room</button>
+            </form>
+
+            <button
+              type="button"
+              class="btn btn-outline-secondary w-100"
+              onclick="window.location.href='/'"
+            >
+              Back to Home
+            </button>
+          </div>
         </div>
+
+        <div class="col-12 col-lg-5 d-flex justify-content-center">
+          <div class="card p-4 shadow-lg rooms-card bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h4 class="mb-1">Available Rooms</h4>
+                <p class="text-muted mb-0">Click a room to auto-fill the ID.</p>
+              </div>
+              <span class="badge bg-secondary">Live</span>
+            </div>
+
+            <div class="room-list">
+              <ul class="list-group" th:if="${rooms != null}" th:unless="${rooms.isEmpty()}">
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center room-row"
+                  th:each="room : ${rooms}"
+                  th:data-room-id="${room.roomId}"
+                  th:data-locked="${room.locked}"
+                  style="cursor: pointer;"
+                >
+                  <div>
+                    <strong th:text="${room.roomName}">Room Name</strong>
+                    <div class="small text-muted">
+                      ID: <span th:text="${room.roomId}">roomId</span>
+                    </div>
+                  </div>
+                  <span th:text="${room.locked} ? '🔒' : '🔓'">🔓</span>
+                </li>
+              </ul>
+
+              <div class="alert alert-secondary py-2 mb-0" th:if="${rooms == null || rooms.isEmpty()}">
+                No rooms available yet. Create one first or refresh.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+
+    <script>
+      const roomRows = document.querySelectorAll(".room-row");
+      const roomIdInput = document.getElementById("roomId");
+      const roomPasswordField = document.getElementById("roomPasswordField");
+      const roomPasswordInput = document.getElementById("roomPassword");
+
+      roomRows.forEach((row) => {
+        row.addEventListener("click", () => {
+          const roomId = row.dataset.roomId;
+          const locked = row.dataset.locked === "true";
+
+          roomIdInput.value = roomId;
+          if (locked) {
+            roomPasswordField.style.display = "block";
+            roomPasswordInput.required = true;
+          } else {
+            roomPasswordField.style.display = "none";
+            roomPasswordInput.required = false;
+            roomPasswordInput.value = "";
+          }
+        });
+      });
+    </script>
+  </body>
 </html>

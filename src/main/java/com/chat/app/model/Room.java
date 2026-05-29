@@ -12,5 +12,7 @@ public class Room {
     String roomId;
     String roomName;
     String createdBy;
+    boolean locked;
+    String password;
 
 }

@@ -1,28 +1,9 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
   <head>
-    <style>
-      .dots::after {
-        content: "";
-        animation: dots 1.5s steps(3, end) infinite;
-      }
-
-      @keyframes dots {
-        0% {
-          content: "";
-        }
-        33% {
-          content: ".";
-        }
-        66% {
-          content: "..";
-        }
-        100% {
-          content: "...";
-        }
-      }
-    </style>
-    <title>Join Chat</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Landing | Chat App</title>
     <link rel="icon" href="images/ab.png" type="image/png" />
     <!-- Bootstrap CDN -->
     <link
@@ -32,55 +13,94 @@
     <link rel="stylesheet" th:href="@{/css/site.css}" />
   </head>
 
-  <body class="bg-dark vh-100">
-    <div
-      class="container-fluid h-100 d-flex justify-content-center align-items-center"
-    >
-      <div class="row justify-content-center g-3 ">
-        <div class="col-12 col-md-6 d-flex justify-content-center">
-          <!-- Left section: Join Chat Form -->
-          <div
-            class="card p-4 shadow-lg text-center"
-            style="width: 350px; border-radius: 15px"
-          >
-            <h3 class="mb-3">💬 Join Global Chat</h3>
+  <body class="landing-page">
+    <div class="background-layer"></div>
+    <div class="animated-shapes">
+      <span class="shape shape-1"></span>
+      <span class="shape shape-2"></span>
+      <span class="shape shape-3"></span>
+    </div>
+
+    <div class="container-fluid h-100 d-flex justify-content-center align-items-center position-relative overflow-hidden">
+      <div class="row justify-content-center g-4 w-100 px-3 landing-grid">
+        <div class="col-12 col-lg-5">
+          <div class="card landing-card p-4 shadow-lg h-100">
+            <div class="hero-badge">Chat Arena</div>
+            <h3 class="mb-3">Join the conversation <span class="dots"></span></h3>
+            <p class="lead text-white-75 mb-4">
+              Instant chat with global rooms, private spaces, and share ideas in real time.
+              Get started with one click.
+            </p>
+
             <form action="/chat" method="get">
-              <input
-                type="text"
-                name="username"
-                class="form-control mb-3"
-                placeholder="Enter your name"
-                required
-              />
+              <div class="mb-3">
+                <label class="form-label text-white-75">Your display name</label>
+                <input
+                  type="text"
+                  name="username"
+                  class="form-control bg-slate-800 text-white"
+                  placeholder="e.g. Alex" 
+                  required
+                />
+              </div>
               <button type="submit" class="btn btn-primary w-100">
-                Enter Chat
+                Enter Global Chat
               </button>
             </form>
+
+            <div class="mt-4 text-start text-white-50">
+              <p class="mb-2"><strong>Why join?</strong></p>
+              <ul class="ps-3 mb-0">
+                <li>Fast, live messaging</li>
+                <li>Secure room access</li>
+                <li>Lightweight and mobile-ready</li>
+              </ul>
+            </div>
           </div>
         </div>
-        <div class="col-12 col-md-6 d-flex justify-content-center">
-          <!-- Right section: Placeholder for Chat Rooms -->
-          <div
-            class="card p-4 shadow-lg text-center"
-            style="width: 350px; border-radius: 15px"
-          >
-            <h3 class="mb-3">Chat Rooms</h3>
+
+        <div class="col-12 col-lg-5">
+          <div class="card landing-card p-4 shadow-lg h-100">
+            <h3 class="mb-3">Create or join a room</h3>
+            <p class="text-white-75 mb-4">
+              Choose an option to enter a focused chat room, invite friends, or continue a conversation instantly.
+            </p>
+
             <button
               type="button"
-              class="btn btn-primary w-100"
+              class="btn btn-primary w-100 mb-3"
               th:onclick="|window.location.href='@{/join}'|"
             >
               Join Existing Room
             </button>
-            <br>
-
             <button
               type="button"
-              class="btn btn-primary w-100"
+              class="btn btn-outline-secondary w-100"
               th:onclick="|window.location.href='@{/create}'|"
             >
               Create Room
             </button>
+
+            <div class="mt-4 text-white-50">
+              <div class="d-flex align-items-center mb-3">
+                <div class="me-3 p-3 rounded-3" style="background: rgba(56, 189, 248, 0.12);">
+                  ⭐
+                </div>
+                <div>
+                  <strong>Fast entry</strong>
+                  <div class="small">No waiting, no refresh.</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center mb-3">
+                <div class="me-3 p-3 rounded-3" style="background: rgba(99, 102, 241, 0.12);">
+                  🔒
+                </div>
+                <div>
+                  <strong>Secure rooms</strong>
+                  <div class="small">Password protected spaces.</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

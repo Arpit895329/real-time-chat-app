@@ -6,4 +6,6 @@ import lombok.Data;
 public class RoomRequest {
  private String roomName;
  private String username;
+ private boolean locked;
+ private String password;
 }

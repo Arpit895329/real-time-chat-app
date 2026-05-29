@@ -1,5 +1,7 @@
 package com.chat.app.service;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -23,10 +25,31 @@ public class RoomService {
         room.setRoomId(roomId);
         room.setRoomName(request.getRoomName());
         room.setCreatedBy(request.getUsername());
+        room.setLocked(request.isLocked());
+        room.setPassword(request.isLocked() ? request.getPassword() : null);
         return roomRepository.save(room);
     }
 
     public boolean roomExists(String roomId) {
         return roomRepository.existsByRoomId(roomId);
+    }
+
+    public List<Room> getAllRooms() {
+        return roomRepository.findAll();
+    }
+
+    public Room getRoom(String roomId) {
+        return roomRepository.findByRoomId(roomId);
+    }
+
+    public boolean isPasswordValid(String roomId, String password) {
+        Room room = getRoom(roomId);
+        if (room == null) {
+            return false;
+        }
+        if (!room.isLocked()) {
+            return true;
+        }
+        return Objects.equals(room.getPassword(), password);
     }
 }
